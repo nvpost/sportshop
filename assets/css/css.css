@@ -1,0 +1,18 @@
+body{
+    font-family: 'Source Code Pro', monospace;
+}
+
+.has-dropdown.has-megaitem .fa.fa-angle-down{
+    margin-left: 0.5rem;
+}
+
+.main_menu_vendor .sub-menu{
+    min-width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+.main_menu_vendor .sub-menu>li{
+    width: 25%;
+}
