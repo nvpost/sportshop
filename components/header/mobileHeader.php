@@ -1,7 +1,6 @@
 <?php
 
 
-
 function drowMobileMenu($item, $path = 'category'){
     $mobileMenuHtml = "<li>
         <a href='#'><span>".$item['label']."</span></a>
@@ -11,7 +10,41 @@ function drowMobileMenu($item, $path = 'category'){
         $mobileMenuHtml .="<li><a href='".$path.$c_item['label']."'>".$c_item['label']."</a></li>";
     }
     $mobileMenuHtml .= "</ul></li>";
-    echo $mobileMenuHtml;
+    return $mobileMenuHtml;
+}
+
+
+$mobileMenuCachedData = mobileMenuCache('mobileMenu');
+
+//$mobileMenuCachedData = mobileMenuData();
+
+function mobileMenuData(){
+    global $mainMenu;
+   foreach ($mainMenu as $item){
+       $data .= drowMobileMenu($item);
+   };
+
+   return $data;
+}
+
+
+function mobileMenuCache($cacheName){
+    // Название кеша - каталог с количеством
+    $dataCache = new DataCache($cacheName);
+    $getDataFromCache = $dataCache->initCacheData();
+
+    if ($getDataFromCache) {
+        // Получаем кэшированные данные из кэша
+        $data = $dataCache->getCacheData();
+        //deb('из кэша');
+    } else {
+        // Исполняем этот код, если кеширование отключено или данные в кеше старые
+        $data = mobileMenuData();
+        //deb('новые данные');
+        //     Обновляем данные в кэше
+        $dataCache->updateCacheData($data);
+    }
+    return $data;
 }
 
 ?>
@@ -26,15 +59,16 @@ function drowMobileMenu($item, $path = 'category'){
     </div>
     <div class="offcanvas-mobile-menu-wrapper">
         <div class="mobile-menu-top">
-            <span>Welcome to our store!</span>
+            <span>Все для спорта. Интернет магазин</span>
         </div>
         <div class="mobile-menu-bottom">
             <div class="offcanvas-menu">
                 <ul>
                     <?php
-                        foreach ($mainMenu as $item){
-                            drowMobileMenu($item);
-                        }
+                        echo $mobileMenuCachedData;
+//                        foreach ($mainMenu as $item){
+//                            drowMobileMenu($item);
+//                        }
                     ?>
                     <li>
                         <a href='#'><span>Производитель</span></a>
@@ -47,10 +81,6 @@ function drowMobileMenu($item, $path = 'category'){
                 </ul>
             </div> <!-- End Mobile Menu Nav -->
 
-            <!-- Mobile Manu Mail Address -->
-            <a class="mobile-menu-email icon-text-right" href="mailto:info@yourdomain.com"><i class="fa fa-envelope-o"> info@yourdomain.com</i></a>
-
-            <!-- Mobile Manu Social Link -->
             <ul class="mobile-menu-social">
                 <li><a href="" class="facebook"><i class="fa fa-facebook"></i></a></li>
                 <li><a href="" class="twitter"><i class="fa fa-twitter"></i></a></li>
